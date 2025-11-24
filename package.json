@@ -1,0 +1,11 @@
+{
+  "name": "mobile_app_apis",
+  "version": "1.0.0",
+  "description": "ifn apis for mobile app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
