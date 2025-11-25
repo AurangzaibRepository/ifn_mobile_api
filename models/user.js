@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING(100),
     state: DataTypes.STRING(100),
     postal_code: DataTypes.INTEGER,
+    password: DataTypes.STRING(300),
     role: DataTypes.ENUM(...Object.values(USER_ROLES)),
     status: {
       defaultValue: USER_STATUS.ACIVE,
