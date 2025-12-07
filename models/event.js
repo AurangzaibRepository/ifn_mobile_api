@@ -31,10 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    total_seats: Sequelize.INTEGER,
+    total_seats: DataTypes.INTEGER,
     seats_booked: {
       defaultValue: 0,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     status: {
       defaultValue: USER_STATUS.ACTIVE,
