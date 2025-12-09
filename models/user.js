@@ -37,6 +37,16 @@ module.exports = (sequelize, DataTypes) => {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       }
+    },
+    scopes: {
+      default: {
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        }
+      },
+      members: {
+        where: {role: USER_ROLES.MEMBER}
+      }
     }
   });
 

@@ -7,12 +7,12 @@ exports.listing = asyncHandler(async (req, res) => {
     const data = await donationService.getListing(req.params.pageNumber);
 
     return res.status(HTTP_STATUS.OK)
-        .send(responseUtil.getResponse(true, null, data));
+        .json(responseUtil.getResponse(true, null, data));
 });
 
 exports.details = asyncHandler(async (req, res) => {
     const data = await donationService.getDetails(req.params.id);
 
     return res.status(HTTP_STATUS.OK)
-        .send(responseUtil.getResponse(true, null, data));
+        .json(responseUtil.getResponse(true, null, data));
 });
