@@ -17,11 +17,24 @@ exports.details = asyncHandler(async (req, res) => {
 
     if (!errors.isEmpty()) {
         return res.status(HTTP_STATUS.BAD_REQUEST)
-            .json(responseUtil.getResponse(false, null, null, errors.array()))
+            .json(responseUtil.getResponse(false, errors.array(), null))
     }
 
     const data = await memberService.getDetails(req.params.id);
 
     return res.status(HTTP_STATUS.OK)
         .json(responseUtil.getResponse(true, null, data));
+});
+
+exports.save = asyncHandler(async (req, res) => {
+     // Check errors
+     const errors = formattedValidationResult(req);
+
+     if (!errors.isEmpty()) {
+        return res.status(HTTP_STATUS.BAD_REQUEST)
+            .json(responseUtil.getResponse(false, errors.array()));
+     }
+
+     return res.status(HTTP_STATUS.OK)
+        .send('Member saved successfully');
 });

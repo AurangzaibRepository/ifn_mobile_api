@@ -1,6 +1,16 @@
 const db = require('../models');
 const pageUtil = require('../utils/page.util');
 
+exports.findByAttribute = async (attribute, value) => {
+    const data = await db.User.findOne({
+        where: {
+            [attribute]: value
+        }
+    });
+
+    return data;
+}
+
 exports.getListing = async (pageNumber) => {
     const { limit, offset } = pageUtil.getLimitOffset(pageNumber);
     const data = await db.User.scope(['default', 'members']).findAll({

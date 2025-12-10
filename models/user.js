@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt');
 const { USER_ROLES } = require('../enums/roles.enum');
 const { USER_STATUS } = require('../enums/status.enum');
 
@@ -23,8 +24,23 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING(100),
     state: DataTypes.STRING(100),
     postal_code: DataTypes.INTEGER,
-    password: DataTypes.STRING(300),
+    password: {
+      type: DataTypes.STRING(300),
+      set(value) {
+        const hashedPassword = bcrypt.hashSync(value, process.env.HASH_SALT_ROUNDS);
+        this.setDataValue('password', hashedPassword);
+      }
+    },
     role: DataTypes.ENUM(...Object.values(USER_ROLES)),
+    picture: {
+      type: DataTypes.STRING(500),
+      get() {
+        const fileName= this.getDataValue('picture');
+        if (!fileName) return null;
+
+        return `${process.env.BASE_URL}/images/users/${fileName}`;
+      }
+    },
     status: {
       defaultValue: USER_STATUS.ACIVE,
       type: DataTypes.ENUM(...Object.values(USER_STATUS))
@@ -35,13 +51,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: ['password', 'createdAt', 'updatedAt']
       }
     },
     scopes: {
       default: {
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['password', 'createdAt', 'updatedAt']
         }
       },
       members: {

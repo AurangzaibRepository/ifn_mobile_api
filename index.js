@@ -9,6 +9,7 @@ const app = express();
 // Middlewares
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use('/images', express.static('public/images'));
 app.use(authenticationMiddleware);
 
 // Routes
