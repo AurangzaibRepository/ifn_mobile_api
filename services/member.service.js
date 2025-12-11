@@ -26,3 +26,23 @@ exports.getDetails = async (id) => {
 
     return data;
 }
+
+exports.createUser = async(data, fileName) => {
+    const user = await db.User.create({
+        ...data,
+        picture: fileName
+    });
+
+    return user;
+}
+
+exports.updateUser = async (id, data, fileName) => {
+    // Update picture only i fprovided
+    if (fileName) {
+        data.picture = fileName;
+    }
+
+    await db.User.update(data, {
+        where: {id}
+    });
+}

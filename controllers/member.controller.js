@@ -35,6 +35,21 @@ exports.save = asyncHandler(async (req, res) => {
             .json(responseUtil.getResponse(false, errors.array()));
      }
 
+     const data = await memberService.createUser(req.body, req.fileName);
      return res.status(HTTP_STATUS.OK)
-        .send('Member saved successfully');
+        .json(responseUtil.getResponse(true, 'Member saved successfully', data));
+});
+
+exports.update = asyncHandler(async (req, res) => {
+    // Check validation errors
+    const errors = formattedValidationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(HTTP_STATUS.BAD_REQUEST)
+            .json(responseUtil.getResponse(false, errors.array()));
+    }
+
+    await memberService.updateUser(req.params.id, req.body, req.fileName);
+    return res.status(HTTP_STATUS.OK)
+        .json(responseUtil.getResponse(true, 'Member updated successfully'));
 });

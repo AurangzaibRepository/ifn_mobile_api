@@ -13,6 +13,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'createdBy'
       });
     }
+
+      // Format response
+    toJSON() {
+      const data = { ...this.get() };
+      delete data.password;
+      delete data.createdAt;
+      delete data.updatedAt;
+
+      return data;
+    }
   }
 
   User.init({
@@ -27,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING(300),
       set(value) {
-        const hashedPassword = bcrypt.hashSync(value, process.env.HASH_SALT_ROUNDS);
+        const hashedPassword = bcrypt.hashSync(value, parseInt(process.env.HASH_SALT_ROUNDS));
         this.setDataValue('password', hashedPassword);
       }
     },
@@ -49,11 +59,12 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
     tableName: 'users',
-    defaultScope: {
+    /*
+    defaultScope: {  // We dont need it as we are using toJSON function above
       attributes: {
         exclude: ['password', 'createdAt', 'updatedAt']
       }
-    },
+    },*/
     scopes: {
       default: {
         attributes: {
