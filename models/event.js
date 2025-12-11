@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     end_date: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.DATE
     },
     total_seats: DataTypes.INTEGER,
     seats_booked: {

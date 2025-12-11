@@ -22,7 +22,7 @@ module.exports = {
       },
       end_date: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       total_seats: Sequelize.INTEGER,
       seats_booked: {
