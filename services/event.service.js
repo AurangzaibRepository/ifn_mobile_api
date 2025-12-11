@@ -1,6 +1,16 @@
 const db = require('../models');
 const pageUtil = require('../utils/page.util');
 
+exports.findByAttribute = async (attribute, value) => {
+    const data = await db.Event.findOne({
+        where: {
+            [attribute]: value
+        }
+    });
+
+    return data;
+}
+
 exports.getListing = async (pageNumber) => {
     const {limit, offset} = pageUtil.getLimitOffset(pageNumber);
 

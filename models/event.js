@@ -15,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'event_id'
       });
     }
+
+    toJSON() {
+      const data = { ...this.get() };
+      delete data.createdAt;
+      delete data.updatedAt;
+      delete data.createdBy;
+
+      return data;
+    }
   }
 
   Event.init({
@@ -51,12 +60,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    tableName: 'events',
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', 'updatedAt']
-      }
-    }
+    tableName: 'events'
   });
 
   return Event;
