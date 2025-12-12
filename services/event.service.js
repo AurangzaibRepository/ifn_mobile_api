@@ -1,6 +1,7 @@
 const db = require('../models');
 const { USER_ROLES } = require('../enums/roles.enum');
 const pageUtil = require('../utils/page.util');
+const eventRegistrationService = require('./event_registration.service');
 
 exports.findByAttribute = async (attribute, value) => {
     const data = await db.Event.findOne({
@@ -36,7 +37,7 @@ exports.getDetails = async (id) => {
 exports.register = async (data) => {
     // If user id provided then save only userid
     if (data.user_id) {
-        await db.EventRegistration.create({
+        await eventRegistrationService.createRegistration({
             event_id: data.event_id,
             user_id: data.user_id
         });
@@ -51,7 +52,7 @@ exports.register = async (data) => {
         role: USER_ROLES.USER
     });
 
-    await db.EventRegistration.create({
+    await eventRegistrationService.createRegistration({
         event_id: data.event_id,
         user_id: user.id
     });
