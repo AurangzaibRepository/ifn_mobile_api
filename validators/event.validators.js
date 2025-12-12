@@ -1,4 +1,5 @@
 const { param, body } = require('express-validator');
+const db = require('../models');
 const eventService = require('../services/event.service');
 const memberService = require('../services/member.service');
 
@@ -29,13 +30,28 @@ exports.registerValidator = [
             const event = await eventService.findByAttribute('id', value);
 
             if (!event) {
-                throw new Error('Event nto found');
+                throw new Error('Event not found');
             }
 
             return true;
         }),
     body('user_id').optional({ checkFalsy: true })
-        .isInt().withMessage('user_id must be numeric'),
+        .isInt().withMessage('user_id must be numeric').bail()
+        .custom(async (value, { req }) => {
+            const userEvent = await db.EventRegistration.findOne({
+                where: {
+                    event_id: req.body.event_id,
+                    user_id: value
+                }
+            });
+
+            // If user already registered with event
+            if (userEvent) {
+                throw new Error('User is already registered for this event');
+            }
+
+            return true;
+        }),
     body('first_name')
         .if(body('user_id').not().exists())
         .notEmpty().withMessage('first_name is required'),
