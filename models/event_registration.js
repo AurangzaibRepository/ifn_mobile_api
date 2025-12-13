@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const db = require('../models');
 
 module.exports = (sequelize, DataTypes) => {
   class EventRegistration extends Model {
@@ -11,7 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       EventRegistration.belongsTo(models.User, {
-        foreignKey: 'user_id'
+        foreignKey: 'user_id',
+      });
+
+      // If we need to add association, have to define here since models are loaded here
+      EventRegistration.addScope('defaultScope', {
+        include: [{
+          model: models.User
+        }]
       });
     }
 
@@ -32,19 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
        }
     },
-    first_name: {
-      allowNull: false,
-      type: DataTypes.STRING(50)
-    },
-    last_name: {
-      allowNull: false,
-      type: DataTypes.STRING(50)
-    },
-    email: {
-      allowNull: false,
-      type: DataTypes.STRING(100)
-    },
-    contact_number: DataTypes.STRING(50),
     user_id: {
       type: DataTypes.INTEGER,
       references: {

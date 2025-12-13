@@ -25,12 +25,24 @@ exports.getListing = async (pageNumber) => {
 }
 
 exports.getDetails = async (id) => {
-    const data = await db.Event.findByPk(id, {
+    let data = await db.Event.findByPk(id, {
         include: {
             model: db.EventRegistration
         }
     });
 
+    data = data.toJSON();
+
+    const eventRegistrations = data.EventRegistrations;
+    data.registrations = eventRegistrations.map((registration) => ({
+        first_name: registration.User.first_name,
+        last_name: registration.User.last_name,
+        email: registration.User.email,
+        contact_number: registration.User.contact_number,
+        picture: registration.User.picture
+    }));
+
+    delete data.EventRegistrations;
     return data;
 }
 

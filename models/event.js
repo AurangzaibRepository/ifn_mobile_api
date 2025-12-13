@@ -17,10 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON() {
-      const data = { ...this.get() };
+      const data = this.get({ plain: true });
       delete data.createdAt;
       delete data.updatedAt;
-      delete data.createdBy;
 
       return data;
     }
@@ -48,6 +47,15 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       defaultValue: USER_STATUS.ACTIVE,
       type: DataTypes.ENUM(...Object.values(USER_STATUS))
+    },
+    picture: {
+      type: DataTypes.STRING(100),
+      get() {
+        const fileName = this.getDataValue('picture');
+        if (!fileName) return null;
+
+        return `${process.env.BASE_URL}/images/events/${fileName}`;
+      }
     },
     createdBy: {
       allowNull: false,
