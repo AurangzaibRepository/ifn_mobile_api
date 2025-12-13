@@ -16,7 +16,7 @@ exports.getListing = async (pageNumber, keyword) => {
     const {limit, offset } = pageUtil.getLimitOffset(pageNumber);
     let where = {};
 
-    // Condition wth full text search
+    // Condition with full text search
     if (keyword) {
         where = {
             [Op.or]: [
