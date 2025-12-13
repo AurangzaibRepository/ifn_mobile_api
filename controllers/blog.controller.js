@@ -13,7 +13,7 @@ exports.listing = asyncHandler(async (req, res) => {
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
-    const data = await blogService.getListing(req.params.pageNumber);
+    const data = await blogService.getListing(req.params.pageNumber, req.query.keyword);
 
     return res.status(HTTP_STATUS.OK)
         .json(responseUtil.getResponse(true, null, data));
