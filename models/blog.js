@@ -27,9 +27,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     banner: {
       allowNull: false,
-      type: DataTypes.STRING(300)
+      type: DataTypes.STRING(300),
+      get() {
+        const fileName = this.getDataValue('banner');
+        if (! fileName) return null;
+
+        return `${process.env.BASE_URL}/images/blogs/${fileName}`;
+      }
     },
-    role: {
+    status: {
       defaultValue: BLOG_STATUS.DRAFT,
       type: DataTypes.ENUM(...Object.values(BLOG_STATUS))
     },
