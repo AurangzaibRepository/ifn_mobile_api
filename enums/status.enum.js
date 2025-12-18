@@ -8,3 +8,9 @@ exports.BLOG_STATUS = Object.freeze({
    PUBLISH: 'Publish',
    ARCHIVE: 'Archive'
 });
+
+exports.PAYMENT_STATUS = Object.freeze({
+    PENDING: 'Pending',
+    SUCCESS: 'Success',
+    'FAILED': 'Failed'
+});
