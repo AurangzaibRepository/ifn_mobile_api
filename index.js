@@ -1,8 +1,7 @@
+require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv');
 const errorHandler = require('./middlewares/error-handler.middleware');
 const authenticationMiddleware = require('./middlewares/authentication.middleware');
-dotenv.config();
 
 const app = express();
 

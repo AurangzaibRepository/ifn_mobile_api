@@ -5,6 +5,7 @@ const router = express.Router();
 module.exports = (app) => {
     router.get('/listing/:pageNumber', donations.listing);
     router.get('/:id', donations.details);
+    router.post('/make-donation', donations.donate);
 
     app.use('/api/donations', router);
 }
