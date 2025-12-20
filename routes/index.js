@@ -4,4 +4,5 @@ module.exports = (app) => {
     require('./event.routes')(app);
     require('./member.routes')(app);
     require('./blog.routes')(app);
+    require('./chat.routes')(app);
 }
