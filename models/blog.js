@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         const fileName = this.getDataValue('banner');
         if (! fileName) return null;
 
-        return `${process.env.BASE_URL}/images/blogs/${fileName}`;
+        return `${process.env.AWS_BASE_URL}/images/blogs/${fileName}`;
       }
     },
     status: {
