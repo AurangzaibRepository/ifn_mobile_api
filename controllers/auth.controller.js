@@ -18,3 +18,18 @@ exports.login = asyncHandler(async (req, res) => {
     return res.status(HTTP_STATUS.OK)
         .json(responseUtil.getResponse(true, null, data));
 });
+
+exports.register = asyncHandler(async (req, res) => {
+    // Check errors
+    const errors = formattedValidationResult(req);
+
+    if (! errors.isEmpty()) {
+        return res.status(HTTP_STATUS.BAD_REQUEST)
+            .json(responseUtil.getResponse(false, errors.array()));
+    }
+
+    const data = await authService.register(req.body, req.fileName);
+
+    return res.status(HTTP_STATUS.OK)   
+        .json(responseUtil.getResponse(true, 'Registration done successfully', data));
+});

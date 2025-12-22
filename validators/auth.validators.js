@@ -37,3 +37,34 @@ exports.loginValidator = [
             return true;
         })
 ];
+
+exports.registerValidator = [
+    body('first_name', 'First name is required')
+        .notEmpty(),
+    body('last_name', 'Last name is required')
+        .notEmpty(),
+    body('email', 'Email is required')
+        .notEmpty().bail()
+        .isEmail().withMessage('Invalid email').bail()
+        .custom(async (value) => {
+            const user = await memberService.findByAttribute('email', value);
+
+            if (user) {
+                throw new Error('Email already exists');
+            }
+
+            return true;
+        }),
+    body('password', 'Password is required')
+        .notEmpty(),
+    body('contact_number').optional()
+        .custom(async (value) => {
+            const user = await memberService.findByAttribute('contact_number', value);
+
+            if (user)  {
+                throw new Error('User with contact number already exists');
+            }
+
+            return true;
+        })
+];
