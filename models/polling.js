@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       Polling.hasMany(models.PollingParticipant, {
         foreignKey: 'polling_id'
       });
+
+      Polling.belongsTo(models.PollingParticipant, {
+        foreignKey: 'winner_participant_id'
+      });
     }
   }
 
@@ -36,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
     total_votes:{
       defaultValue: 0,
       type: DataTypes.INTEGER
+    },
+    winner_participant_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'polling_participants',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
