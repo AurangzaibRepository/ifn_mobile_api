@@ -17,6 +17,8 @@ exports.loginUser = async (email) => {
     return {
         id: user.id,
         email: user.email,
+        name: `${user.first_name} ${user.last_name}`,
+        picture: user.picture,
         token
     };
 }
