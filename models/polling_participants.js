@@ -5,14 +5,13 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class PollingParticipant extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       PollingParticipant.belongsTo(models.Polling, {
         foreignKey: 'polling_id'
+      });
+
+      PollingParticipant.hasMany(models.PollingVote, {
+        foreignKey: 'participant_id'
       });
     }
   }

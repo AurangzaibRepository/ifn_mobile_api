@@ -6,7 +6,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class PollingVote extends Model {
     static associate(models) {
-      // define association here
+      this.belongsTo(models.PollingParticipant, {
+        foreignKey: 'participant_id'
+      });
     }
   }
 
