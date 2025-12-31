@@ -3,12 +3,17 @@ const {
   Model
 } = require('sequelize');
 const { PAYMENT_STATUS } = require('../enums/status.enum');
+const formatUtil = require('../utils/formatter.util');
 
 module.exports = (sequelize, DataTypes) => {
   class DonationContribution extends Model {
     static associate(models) {
       this.belongsTo(models.Donation, {
         'foreignKey': 'donation_id'
+      });
+
+      this.belongsTo(models.User, {
+        'foreignKey': 'user_id' 
       });
     }
   }
@@ -44,13 +49,22 @@ module.exports = (sequelize, DataTypes) => {
     currency: {
       type: DataTypes.STRING(20)
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      get() {
+        const rawValue = this.getDataValue('createdAt');
+        if (! rawValue) return null;
+
+        return formatUtil.formatDate(rawValue);
+      }
+    }
   }, {
     sequelize,
     modelName: 'DonationContribution',
     tableName: 'donation_contributions',
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt']
+        exclude: ['updatedAt']
       }
     }
   });

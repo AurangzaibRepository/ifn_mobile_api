@@ -9,7 +9,7 @@ exports.listing = asyncHandler(async (req, res) => {
     const errors = formattedValidationResult(req);
 
     if (! errors.isEmpty()) {
-        return res.status(HTTP_STATUS.OK)
+        return res.status(HTTP_STATUS.BAD_REQUEST)
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
@@ -24,7 +24,7 @@ exports.details = asyncHandler(async (req, res) => {
     const errors = formattedValidationResult(req);
 
     if (! errors.isEmpty()) {
-        return res.status(HTTP_STATUS.OK)
+        return res.status(HTTP_STATUS.BAD_REQUEST)
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
