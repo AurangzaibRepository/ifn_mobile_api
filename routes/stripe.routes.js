@@ -4,7 +4,7 @@ const stripe = require('../controllers/stripe.controller') ;
 const router = express.Router();
 
 module.exports = (app) => {
-    router.post('/stripe-webhook-payment',
+    router.post('/payment-webhook',
         bodyParser.raw({ type: 'application/json' }),
         stripe.processPayment
     );
