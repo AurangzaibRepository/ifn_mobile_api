@@ -1,13 +1,14 @@
 const stripe = require('../libs/stripe');
 
-exports.createIntent = async (donationId, amount) => {
+exports.createIntent = async (donationContributionId, amount) => {
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: (amount * 10), // in cents
+        amount: (amount * 100), // in cents
         currency: process.env.STRIPE_CURRENCY,
         metadata: {
-            donationId
-        }
+            donationContributionId
+        },
+        automatic_payment_methods: { enabled: true }
     });
-    console.log(paymentIntent.client_secret);
+    
     return paymentIntent.client_secret;
 }

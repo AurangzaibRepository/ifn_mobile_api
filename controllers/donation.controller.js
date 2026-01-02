@@ -44,8 +44,8 @@ exports.donate = asyncHandler(async (req, res) => {
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
-    await donationContributionService.makeDonation(req.body);
+    const data = await donationContributionService.makeDonation(req.body);
 
     return res.status(HTTP_STATUS.OK)
-        .json(responseUtil.getResponse(true, 'Donation made successfully'));
+        .json(responseUtil.getResponse(true, 'Donation made successfully', data));
 });
