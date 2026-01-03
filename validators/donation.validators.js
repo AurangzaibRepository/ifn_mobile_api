@@ -1,6 +1,8 @@
+const db = require('../models');
 const { param, body } = require('express-validator');
 const donationService = require('../services/donation.service');
 const memberService = require('../services/member.service');
+const { USER_ROLES } = require('../enums/roles.enum');
 
 exports.listingValidator = [
     param('pageNumber', 'Page number must be numeric')
@@ -59,10 +61,15 @@ exports.makeDonationValidator = [
         .notEmpty().bail()
         .isEmail().withMessage('Invalid email').bail()
         .custom(async (value) => {
-            const user = await memberService.findByAttribute('email', value);
+            const user = await db.User.findOne({
+                where: {
+                    email: value,
+                    role: USER_ROLES.MEMBER
+                }
+            });
 
             if (user) {
-                throw new Error(`User with email ${value} exists`);
+                throw new Error(`User with email ${value} already registered. Please login to donate`);
             }
 
             return true;

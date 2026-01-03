@@ -8,16 +8,20 @@ exports.makeDonation = async (data) => {
 
     // Create user if user_id not provided
     if (! data.user_id) {
-        const user = await memberService.createUser({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            email: data.email,
-            role: USER_ROLES.USER
-        });
+        // Create or fetch user by email user role
+        const user = await memberService.findOrCreate({
+                email: data.email,
+                role: USER_ROLES.USER
+            },
+            {
+                first_name: data.first_name,
+                last_name: data.last_name
+            });
 
         user_id = user.id;
     }
 
+    // Make donation
     const donationContribution = await db.DonationContribution.create({
         ...data,
         user_id

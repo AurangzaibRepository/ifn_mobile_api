@@ -46,3 +46,12 @@ exports.updateUser = async (id, data, fileName) => {
         where: {id}
     });
 }
+
+exports.findOrCreate = async (where, defaults) => {
+    const [user, created] = await db.User.findOrCreate({
+        where,
+        defaults
+    });
+
+    return user;
+}
