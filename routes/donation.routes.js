@@ -9,8 +9,8 @@ const router = express.Router();
 
 module.exports = (app) => {
     router.get('/listing/:pageNumber', listingValidator, donations.listing);
-    router.get('/:id', detailValidator, donations.details);
     router.post('/make-donation', makeDonationValidator, donations.donate);
+    router.get('/:id', detailValidator, donations.details);
 
     app.use('/api/donations', router);
 }
