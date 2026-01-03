@@ -52,6 +52,9 @@ module.exports = (sequelize, DataTypes) => {
     payment_intent: {
       type: DataTypes.STRING(200)
     },
+    payment_intent_id: {
+      type: DataTypes.STRING(100)
+    },
     createdAt: {
       type: DataTypes.DATE,
       get() {

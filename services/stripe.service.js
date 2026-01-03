@@ -10,5 +10,8 @@ exports.createIntent = async (donationContributionId, amount) => {
         automatic_payment_methods: { enabled: true }
     });
     
-    return paymentIntent.client_secret;
+    return {
+        payment_intent_id: paymentIntent.id,
+        payment_intent: paymentIntent.client_secret
+    };
 }

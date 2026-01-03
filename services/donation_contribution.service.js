@@ -24,16 +24,18 @@ exports.makeDonation = async (data) => {
     });
 
     // Make stripe intent
-    const stripeClientSecret = await stripeService.createIntent(donationContribution.id, data.amount);
+    const {payment_intent_id, payment_intent} = await stripeService.createIntent(donationContribution.id, data.amount);
 
     // Update payment intent in database
     await this.updateRecord(donationContribution.id, {
-        payment_intent: stripeClientSecret
+        payment_intent,
+        payment_intent_id
     });
 
     return {
         donationContributionId: donationContribution.id,
-        clientSecret: stripeClientSecret
+        paymentIntentId: payment_intent_id,
+        paymentIntent: payment_intent
     };
 }
 

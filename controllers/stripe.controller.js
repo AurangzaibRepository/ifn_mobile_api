@@ -1,4 +1,5 @@
 const stripe = require('../libs/stripe');
+const donationContributionService = require('../services/donation_contribution.service');
 
 exports.processPayment = async (req, res) => {
     const signature = req.headers['stripe-signature'];
@@ -15,6 +16,16 @@ exports.processPayment = async (req, res) => {
         console.log(`Stripe webhook error: ${err.message}`);
     }
 
-    console.log(`Event type: ${event.type}`);
-    console.log(event.data.object);
+    const eventType = event.type;
+    const eventData = event.data.object;
+    const paymentStatus = eventType == 'payment_intent.succeeded'
+        ? 'Success'
+        : (eventType == 'payment_intent.payment_failed' ? 'Failed' : 'Pending');
+    console.log(`Event type: ${eventType}`);
+    console.log(eventData);
+    
+
+    await donationContributionService.updateRecord(eventData.Metadata.donationContributionId, {
+        payment_status: paymentStatus
+    });
 }
