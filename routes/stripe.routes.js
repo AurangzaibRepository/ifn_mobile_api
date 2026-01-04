@@ -8,6 +8,9 @@ module.exports = (app) => {
         bodyParser.raw({ type: 'application/json' }),
         stripe.processPayment
     );
+    router.post('/complete-payment',
+        bodyParser.json(),
+        stripe.completePayment);
 
     app.use('/api/stripe', router);
 }

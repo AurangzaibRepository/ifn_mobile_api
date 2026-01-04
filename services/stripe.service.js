@@ -7,7 +7,9 @@ exports.createIntent = async (donationContributionId, amount) => {
         metadata: {
             donationContributionId
         },
-        automatic_payment_methods: { enabled: true }
+        automatic_payment_methods: {
+            enabled: true,  allow_redirects: 'never' // ✅ disable redirect-based methods
+        }
     });
     
     return {

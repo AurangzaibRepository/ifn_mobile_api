@@ -50,3 +50,15 @@ exports.processPayment = async (req, res) => {
         receipt_url: receiptUrl
     });
 }
+
+exports.completePayment = async (req, res) => {
+    const confirmedPaymentIntent = await stripe.paymentIntents.confirm(
+        req.body.payment_intent_id, // your PaymentIntent ID
+        {
+          payment_method: "pm_card_visa" // Stripe test card
+        }
+      );
+      
+      console.log("PaymentIntent Status:", confirmedPaymentIntent.status);
+      console.log("ID:", confirmedPaymentIntent.id);
+}
