@@ -1,5 +1,5 @@
 const stripe = require('../libs/stripe');
-const { log } = require('../services/logger.service');
+const { logInfo } = require('../services/logger.service');
 const HTTP_STATUS = require('../enums/http-status.enum');
 const donationContributionService = require('../services/donation_contribution.service');
 
@@ -53,7 +53,7 @@ exports.processPayment = async (req, res) => {
     }
 
     // Cloudwatch logs
-    log({
+    logInfo({
         event: eventType,
         paymentIntentId: eventData.id,
         donationContributionId: eventData.metadata?.donationContributionId || null,
