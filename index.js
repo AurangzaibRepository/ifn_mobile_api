@@ -5,13 +5,16 @@ const authenticationMiddleware = require('./middlewares/authentication.middlewar
 
 const app = express();
 
+// Unprotected route
+require('./routes/stripe.routes')(app);
+
 // Middlewares
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use('/images', express.static('public/images'));
-app.use(authenticationMiddleware);
 
 // Routes
+app.use(authenticationMiddleware);
 require('./routes')(app);
 
 // Error handler

@@ -45,6 +45,6 @@ exports.makeDonation = async (data) => {
 
 exports.updateRecord = async (id, data) => {
     await db.DonationContribution.update(data, {
-        where: {id }
+        where: { id }
     });
 }

@@ -46,15 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    currency: {
-      type: DataTypes.STRING(20)
-    },
-    payment_intent: {
-      type: DataTypes.STRING(200)
-    },
-    payment_intent_id: {
-      type: DataTypes.STRING(100)
-    },
+    currency: DataTypes.STRING(20),
+    payment_intent: DataTypes.STRING(200),
+    payment_intent_id: DataTypes.STRING(100),
+    receipt_url: DataTypes.STRING(700),
     createdAt: {
       type: DataTypes.DATE,
       get() {
