@@ -1,4 +1,6 @@
 const stripe = require('../libs/stripe');
+const { log } = require('../services/logger.service');
+const HTTP_STATUS = require('../enums/http-status.enum');
 const donationContributionService = require('../services/donation_contribution.service');
 
 exports.processPayment = async (req, res) => {
@@ -7,6 +9,7 @@ exports.processPayment = async (req, res) => {
     let receiptUrl;
     let paymentStatus;
 
+    // Create stripe event after signature verification
     try {
         event = stripe.webhooks.constructEvent(
             req.body,
@@ -17,7 +20,7 @@ exports.processPayment = async (req, res) => {
         // Save in logs
         console.log(`Stripe webhook error: ${err.message}`);
     }
-
+     //event = JSON.parse(req.body.toString());
     const eventType = event.type;
     const eventData = event.data.object;
 
@@ -41,14 +44,32 @@ exports.processPayment = async (req, res) => {
         }
     }
     
-      console.log(`----Payment status--------: ${eventData.status}`);
+    // Show console only on development/local
+    if (process.env.NODE_ENV == 'development') {
+      console.log(`----Payment status--------: ${paymentStatus}`);
       console.log('------medatadata-------', eventData.metadata);
       console.log(`------Payment intent id----------: ${eventData.id}`);
       console.log(`------Receipt url--------: ${receiptUrl}`);
-    await donationContributionService.updateRecord(eventData.Metadata.donationContributionId, {
+    }
+
+    // Cloudwatch logs
+    log({
+        event: eventType,
+        paymentIntentId: eventData.id,
+        donationContributionId: eventData.metadata?.donationContributionId || null,
+        paymentStatus: paymentStatus,
+        receiptUrl: receiptUrl || null,
+        timestamp: new Date().toISOString()
+    });   
+
+    // Update database
+    await donationContributionService.updateRecord(eventData.metadata.donationContributionId, {
         payment_status: paymentStatus,
         receipt_url: receiptUrl
     });
+
+    return res.status(HTTP_STATUS.OK)
+        .send('Success');
 }
 
 exports.completePayment = async (req, res) => {
