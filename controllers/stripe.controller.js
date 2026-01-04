@@ -41,9 +41,10 @@ exports.processPayment = async (req, res) => {
         }
     }
     
-      //console.log(`----Payment status--------: ${eventData.status}`);
-      //console.log('------medatadata-------', eventData.metadata);
-      //console.log(`------Payment intent id----------: ${eventData.id}`);
+      console.log(`----Payment status--------: ${eventData.status}`);
+      console.log('------medatadata-------', eventData.metadata);
+      console.log(`------Payment intent id----------: ${eventData.id}`);
+      console.log(`------Receipt url--------: ${receiptUrl}`);
     await donationContributionService.updateRecord(eventData.Metadata.donationContributionId, {
         payment_status: paymentStatus,
         receipt_url: receiptUrl
