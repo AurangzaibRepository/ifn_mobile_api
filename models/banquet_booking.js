@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { BOOKING_STATUS } = require('../enums/status.enum');
 
 module.exports = (sequelize, DataTypes) => {
   class BanquetBooking extends Model {
