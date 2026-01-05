@@ -1,0 +1,48 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+  class BanquetBooking extends Model {
+    static associate(models) {
+      // define association here
+    }
+  }
+
+  BanquetBooking.init({
+    title: {
+      allowNull: false,
+      type: DataTypes.STRING(100)
+    },
+    description: DataTypes.TEXT,
+    booking_date: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    guest_count: DataTypes.INTEGER,
+    user_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
+    status: {
+      defaultValue: BOOKING_STATUS.PENDING,
+      type: DataTypes.ENUM(...Object.values(BOOKING_STATUS))
+    },
+  }, {
+    sequelize,
+    modelName: 'BanquetBooking',
+    tableName: 'banquet_bookings',
+    defaultScope: {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      }
+    }
+  });
+
+  return BanquetBooking;
+};

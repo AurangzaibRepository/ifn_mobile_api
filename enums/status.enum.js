@@ -14,3 +14,9 @@ exports.PAYMENT_STATUS = Object.freeze({
     SUCCESS: 'Success',
     'FAILED': 'Failed'
 });
+
+exports.BOOKING_STATUS = Object.freeze({
+    PENDING: 'Pending',
+    CONFIRMED: 'Confirmed',
+    CANCELLED: 'Cancelled'
+});
