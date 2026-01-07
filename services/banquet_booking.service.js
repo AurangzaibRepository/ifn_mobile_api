@@ -37,6 +37,22 @@ exports.createRecord = async (data) => {
     // Create booking
     const booking = await db.BanquetBooking.create(data);
 
-    // Stripe payment in
+    // Make stripe intent
+    const {payment_intent_id, payment_intent} = await stripeService.createIntent('BanquetBooking', booking.id, data.amount);
+    await this.updateRecord(booking.id, {
+        payment_intent,
+        payment_intent_id
+    });
 
+    return {
+        bookingId: booking.id,
+        paymentIntentId: payment_intent_id,
+        paymentIntent: payment_intent
+    };
+}
+
+exports.updateRecord = async (id, data) => {
+    await db.BanquetBooking.update(data, {
+        where: { id }
+    });
 }

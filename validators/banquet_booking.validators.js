@@ -32,6 +32,9 @@ exports.createValidator = [
 
       return true;
    }),
+   body('amount', 'amount is required')
+    .notEmpty().bail()
+    .isFloat({ min: 1 }).withMessage('Amount must be positive number greater than or equal to 1'),
    body('first_name')
      .if(body('user_id').not().exists())
      .notEmpty().withMessage('first_name is required'),

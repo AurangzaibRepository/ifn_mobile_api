@@ -26,8 +26,8 @@ exports.create = asyncHandler(async (req, res) => {
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
-    await banquetBookingService.createRecord(req.body);
+    const data = await banquetBookingService.createRecord(req.body);
 
     return res.status(HTTP_STATUS.OK)
-        .json(responseUtil.getResponse(true, 'Booking created successfully'));
+        .json(responseUtil.getResponse(true, 'Booking created successfully', data));
 });

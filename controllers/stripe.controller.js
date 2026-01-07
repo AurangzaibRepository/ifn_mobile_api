@@ -1,4 +1,5 @@
 const stripe = require('../libs/stripe');
+const db = require('../models');
 const { logInfo } = require('../services/logger.service');
 const HTTP_STATUS = require('../enums/http-status.enum');
 const donationContributionService = require('../services/donation_contribution.service');
@@ -56,14 +57,15 @@ exports.processPayment = async (req, res) => {
     logInfo({
         event: eventType,
         paymentIntentId: eventData.id,
-        donationContributionId: eventData.metadata?.donationContributionId || null,
+        model: eventData.metadata?.model,
+        modelId: eventData.metadata?.modelId,
         paymentStatus: paymentStatus,
         receiptUrl: receiptUrl || null,
         timestamp: new Date().toISOString()
     });   
 
     // Update database
-    await donationContributionService.updateRecord(eventData.metadata.donationContributionId, {
+    await db[eventData.metadata.model].updateRecord(eventData.metadata.modelId, {
         payment_status: paymentStatus,
         receipt_url: receiptUrl
     });

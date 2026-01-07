@@ -38,7 +38,7 @@ exports.makeDonationValidator = [
         }),
     body('amount', 'Amount is required')
         .notEmpty().bail()
-        .isFloat({ min: 0 }).withMessage('Amount must be positive number'),
+        .isFloat({ min: 1 }).withMessage('Amount must be positive number greater than or equal to 1'),
     body('user_id').optional({ checkFalsy: true })
         .isInt().withMessage('User Id must be numeric').bail()
         .custom(async (value) => {
