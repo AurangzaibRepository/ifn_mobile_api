@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const { BOOKING_STATUS } = require('../enums/status.enum');
+const { BOOKING_STATUS, PAYMENT_STATUS } = require('../enums/status.enum');
 
 module.exports = (sequelize, DataTypes) => {
   class BanquetBooking extends Model {
@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
     payment_intent: DataTypes.STRING(200),
     payment_intent_id: DataTypes.STRING(100),
     receipt_url: DataTypes.STRING(700),
+    payment_status: {
+      defaultValue: PAYMENT_STATUS.PENDING,
+      type: DataTypes.ENUM(...Object.values(PAYMENT_STATUS))
+    },
     status: {
       defaultValue: BOOKING_STATUS.PENDING,
       type: DataTypes.ENUM(...Object.values(BOOKING_STATUS))
