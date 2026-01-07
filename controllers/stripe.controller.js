@@ -11,6 +11,7 @@ exports.processPayment = async (req, res) => {
     let paymentStatus;
 
     // Create stripe event after signature verification
+    /*
     try {
         event = stripe.webhooks.constructEvent(
             req.body,
@@ -20,8 +21,8 @@ exports.processPayment = async (req, res) => {
     } catch (err) {
         // Save in logs
         console.log(`Stripe webhook error: ${err.message}`);
-    }
-     //event = JSON.parse(req.body.toString());
+    }*/
+     event = JSON.parse(req.body.toString());
     const eventType = event.type;
     const eventData = event.data.object;
 
@@ -65,11 +66,13 @@ exports.processPayment = async (req, res) => {
     });   
 
     // Update database
-    await db[eventData.metadata.model].updateRecord(eventData.metadata.modelId, {
+    const [affectedRows] = await db.BanquetBooking.update({
         payment_status: paymentStatus,
         receipt_url: receiptUrl
+    }, {
+        where: { id: eventData.metadata.modelId }
     });
-
+    
     return res.status(HTTP_STATUS.OK)
         .send('Success');
 }

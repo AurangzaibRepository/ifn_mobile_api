@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
+    payment_intent: DataTypes.STRING(200),
+    payment_intent_id: DataTypes.STRING(100),
+    receipt_url: DataTypes.STRING(700),
     status: {
       defaultValue: BOOKING_STATUS.PENDING,
       type: DataTypes.ENUM(...Object.values(BOOKING_STATUS))
