@@ -12,7 +12,7 @@ exports.BLOG_STATUS = Object.freeze({
 exports.PAYMENT_STATUS = Object.freeze({
     PENDING: 'Pending',
     SUCCESS: 'Success',
-    'FAILED': 'Failed'
+    FAILED: 'Failed'
 });
 
 exports.BOOKING_STATUS = Object.freeze({
