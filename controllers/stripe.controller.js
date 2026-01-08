@@ -1,28 +1,25 @@
+const asyncHandler = require('express-async-handler');
 const stripe = require('../libs/stripe');
 const db = require('../models');
 const { logInfo } = require('../services/logger.service');
 const HTTP_STATUS = require('../enums/http-status.enum');
 const donationContributionService = require('../services/donation_contribution.service');
 
-exports.processPayment = async (req, res) => {
+exports.processPayment = asyncHandler(async (req, res) => {
     const signature = req.headers['stripe-signature'];
     let event;
     let receiptUrl;
     let paymentStatus;
 
     // Create stripe event after signature verification
-    /*
-    try {
-        event = stripe.webhooks.constructEvent(
-            req.body,
-            signature,
-            process.env.STRIPE_WEBHOOK_SECRET
-        );
-    } catch (err) {
-        // Save in logs
-        console.log(`Stripe webhook error: ${err.message}`);
-    }*/
-     event = JSON.parse(req.body.toString());
+    event = stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET
+    );
+    // For local postman testing
+    //event = JSON.parse(req.body.toString());
+    
     const eventType = event.type;
     const eventData = event.data.object;
 
@@ -66,16 +63,16 @@ exports.processPayment = async (req, res) => {
     });   
 
     // Update database
-    const [affectedRows] = await db.BanquetBooking.update({
+    await db[`${eventData.metadata.model}`].update({
         payment_status: paymentStatus,
         receipt_url: receiptUrl
     }, {
         where: { id: eventData.metadata.modelId }
     });
-    
+
     return res.status(HTTP_STATUS.OK)
         .send('Success');
-}
+});
 
 exports.completePayment = async (req, res) => {
     const confirmedPaymentIntent = await stripe.paymentIntents.confirm(
