@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     start_date: {
       allowNull: false,
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('start_date');
         if (! rawValue) return null;
@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     end_date: {
       allowNull: false,
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('end_date');
         if (! rawValue) return null;
