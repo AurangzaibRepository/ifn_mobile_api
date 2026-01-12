@@ -4,11 +4,6 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Polling extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       Polling.hasMany(models.PollingParticipant, {
         foreignKey: 'polling_id'
@@ -31,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     start_date: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     },
     end_date: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     },
     total_votes:{
       defaultValue: 0,
