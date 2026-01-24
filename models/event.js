@@ -3,6 +3,7 @@ const {
   Model
 } = require('sequelize');
 const { USER_STATUS } = require('../enums/status.enum');
+const formatUtil = require('../utils/formatter.util');
 
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
@@ -33,11 +34,21 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     start_date: {
       allowNull:false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      get() {
+        const rawValue = this.getDataValue('start_date');
+
+        return rawValue ? formatUtil.formatDate(rawValue) : null;
+      }
     },
     end_date: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      get() {
+        const rawValue = this.getDataValue('end_date');
+
+        return rawValue ? formatUtil.formatDate(rawValue) : null;
+      }
     },
     total_seats: DataTypes.INTEGER,
     seats_booked: {
