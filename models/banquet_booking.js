@@ -3,6 +3,7 @@ const {
   Model
 } = require('sequelize');
 const { BOOKING_STATUS, PAYMENT_STATUS } = require('../enums/status.enum');
+const formatUtil = require('../utils/formatter.util');
 
 module.exports = (sequelize, DataTypes) => {
   class BanquetBooking extends Model {
@@ -19,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     booking_date: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      get() {
+        const rawValue = this.getDataValue('booking_date');
+
+        return rawValue ? formatUtil.formatDate(rawValue) : null;
+      }
     },
     guest_count: DataTypes.INTEGER,
     user_id: {
@@ -48,7 +54,8 @@ module.exports = (sequelize, DataTypes) => {
     defaultScope: {
       attributes: {
         exclude: ['createdAt', 'updatedAt']
-      }
+      },
+      order: [ ['id', 'DESC'] ]
     }
   });
 

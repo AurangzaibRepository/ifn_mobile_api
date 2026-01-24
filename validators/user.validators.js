@@ -10,8 +10,8 @@ const saveValidators = [
         .notEmpty()
 ];
 
-exports.detailsValidator = [
-    param('id', 'Id must be numeric').isInt().bail()
+exports.detailsValidator = (paramName) => [ // Pass param name dyanamically since its using at multiple places
+    param(paramName, 'Id must be numeric').isInt().bail()
         .custom(async (value) => {
             const user = await memberService.findByAttribute('id', value);
 

@@ -18,6 +18,14 @@ exports.findActiveBooking = async (date) => {
     return data;
 }
 
+exports.getListing = async (userId) => {
+    const data = await db.BanquetBooking.findAll({
+        where: { user_id: userId }
+    });
+
+    return data;
+}
+
 exports.createRecord = async (data) => {
     // Create guest user if user_id not provided
     if (! data.user_id) {

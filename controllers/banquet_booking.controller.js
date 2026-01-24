@@ -13,8 +13,10 @@ exports.listing = asyncHandler(async (req, res) => {
             .json(responseUtil.getResponse(false, errors.array()));
     }
 
+    const data = await banquetBookingService.getListing(req.params.userId);
+
     return res.status(HTTP_STATUS.OK)
-        .json(responseUtil.getResponse(true, null));
+        .json(responseUtil.getResponse(true, null, data));
 });
 
 exports.create = asyncHandler(async (req, res) => {
