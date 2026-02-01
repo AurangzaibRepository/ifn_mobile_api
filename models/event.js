@@ -79,7 +79,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    tableName: 'events'
+    tableName: 'events',
+    defaultScope: {
+      where: {
+        status: USER_STATUS.ACIVE
+      }
+    }
   });
 
   return Event;

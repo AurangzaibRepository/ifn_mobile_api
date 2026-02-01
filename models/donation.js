@@ -4,6 +4,7 @@ const {
 } = require('sequelize');
 const { USER_STATUS } = require('../enums/status.enum');
 const formatUtil = require('../utils/formatter.util');
+const activeStatus = USER_STATUS.ACIVE;
 
 module.exports = (sequelize, DataTypes) => {
   class Donation extends Model {
@@ -60,6 +61,9 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Donation',
     tableName: 'donations',
     defaultScope: {
+      where: {
+        status: activeStatus
+      },
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
