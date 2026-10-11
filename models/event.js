@@ -42,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     end_date: {
-      allowNull: false,
       type: DataTypes.DATE,
       get() {
         const rawValue = this.getDataValue('end_date');

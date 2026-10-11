@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(8,2)
     },
     start_date: {
-      allowNull: false,
       type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('start_date');
@@ -43,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     end_date: {
-      allowNull: false,
       type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('end_date');

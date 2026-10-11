@@ -34,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING(100),
     state: DataTypes.STRING(100),
     postal_code: DataTypes.INTEGER,
+    membership_registration_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+  },
+  membership_expiry_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+  },
     password: {
       type: DataTypes.STRING(300),
       set(value) {
