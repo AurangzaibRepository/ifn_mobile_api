@@ -1,3 +1,4 @@
+const { USER_ROLES } = require('../enums/roles.enum');
 const db = require('../models');
 const pageUtil = require('../utils/page.util');
 
@@ -65,10 +66,10 @@ exports.makeMember= async (id, data) => {
         }
     
         // Update user with incoming data and force role to 'Member'
-        await db.User.update({
-          ...data,       // Any extra fields passed from req.body
-          role: 'Member' // Force the role to be 'Member'
-        });
+        await db.User.update(
+  { ...data, role: USER_ROLES.MEMBER },
+  { where: { id } }
+);
     
         return user;
       } catch (error) {

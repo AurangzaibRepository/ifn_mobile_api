@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         const fileName= this.getDataValue('picture');
         if (!fileName) return null;
 
-        return `${process.env.AWS_BASE_URL}/images/members/${fileName}`;
+        return `${process.env.BASE_URL}/images/members/${fileName}`;
       }
     },
     status: {

@@ -4,7 +4,6 @@ const {
 } = require('sequelize');
 const { USER_STATUS } = require('../enums/status.enum');
 const formatUtil = require('../utils/formatter.util');
-const activeStatus = USER_STATUS.ACIVE;
 
 module.exports = (sequelize, DataTypes) => {
   class Donation extends Model {
@@ -30,40 +29,46 @@ module.exports = (sequelize, DataTypes) => {
     },
     total_contribution: {
       allowNull: false,
+      defaultValue: 0,
       type: DataTypes.DECIMAL(8,2)
     },
     start_date: {
-      allowNull: false,
       type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('start_date');
-        if (! rawValue) return null;
-
-        return formatUtil.formatDate(rawValue);
+        return rawValue ? formatUtil.formatDate(rawValue) : null;
       }
     },
     end_date: {
-      allowNull: false,
       type: DataTypes.DATEONLY,
       get() {
         const rawValue = this.getDataValue('end_date');
-        if (! rawValue) return null;
-
-        return formatUtil.formatDate(rawValue);
+        return rawValue ? formatUtil.formatDate(rawValue) : null;
       }
     },
     status: {
       defaultValue: USER_STATUS.ACIVE,
       type: DataTypes.ENUM(...Object.values(USER_STATUS))
+    },
+    picture: {
+      type: DataTypes.STRING(100),
+      get() {
+        const fileName = this.getDataValue('picture');
+        if (!fileName) return null;
+
+        if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+          return fileName;
+        }
+
+        const baseUrl = (process.env.BASE_URL || process.env.AWS_BASE_URL || '').replace(/\/+$/, '');
+        return `${baseUrl}/public/images/donations/${fileName}`;
+      }
     }
   }, {
     sequelize,
     modelName: 'Donation',
     tableName: 'donations',
     defaultScope: {
-      where: {
-        status: activeStatus
-      },
       attributes: {
         exclude: ['createdAt', 'updatedAt']
       },
