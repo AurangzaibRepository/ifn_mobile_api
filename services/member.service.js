@@ -58,17 +58,16 @@ exports.findOrCreate = async (where, defaults) => {
 
 exports.makeMember= async (id, data) => {
     try {
-        // Find the user first to make sure they exist
         const user = await db.User.findByPk(id);
     
         if (!user) {
           throw new Error('User not found');
         }
     
-        // Update the user record with the provided data
+        // Update user with incoming data and force role to 'Member'
         await db.User.update({
-          ...data,
-          isMember: true // Optional flag update
+          ...data,       // Any extra fields passed from req.body
+          role: 'Member' // Force the role to be 'Member'
         });
     
         return user;
