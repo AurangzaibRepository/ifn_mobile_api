@@ -14,7 +14,7 @@ app.use(express.json());
 app.use('/images', express.static('public/images'));
 
 // Routes
-app.use(authenticationMiddleware);
+// app.use(authenticationMiddleware);
 require('./routes')(app);
 
 // Error handler

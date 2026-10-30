@@ -6,6 +6,7 @@ const router = express.Router();
 
 module.exports = (app) => {
     router.get('/:id', detailsValidator('id'), members.details);
+    router.post('/become/:id', detailsValidator('id'), members.becomeMember);
     router.post('/', upload('users').single('file'), saveValidator, members.save);
     router.put('/:id', upload('users').single('file'), updateValidator, members.update);
 

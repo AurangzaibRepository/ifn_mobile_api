@@ -53,3 +53,17 @@ exports.update = asyncHandler(async (req, res) => {
     return res.status(HTTP_STATUS.OK)
         .json(responseUtil.getResponse(true, 'Member updated successfully'));
 });
+
+exports.becomeMember = asyncHandler(async (req, res) => {
+         // Check errors
+         const errors = formattedValidationResult(req);
+
+         if (!errors.isEmpty()) {
+            return res.status(HTTP_STATUS.BAD_REQUEST)
+                .json(responseUtil.getResponse(false, errors.array()));
+         }
+
+         await memberService.makeMember(req.params.id, req.body);
+         return res.status(HTTP_STATUS.OK)
+            .json(responseUtil.getResponse(true, 'Member became successfully'));
+});

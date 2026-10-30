@@ -55,3 +55,24 @@ exports.findOrCreate = async (where, defaults) => {
 
     return user;
 }
+
+exports.makeMember= async (id, data) => {
+    try {
+        // Find the user first to make sure they exist
+        const user = await db.User.findByPk(id);
+    
+        if (!user) {
+          throw new Error('User not found');
+        }
+    
+        // Update the user record with the provided data
+        await db.User.update({
+          ...data,
+          isMember: true // Optional flag update
+        });
+    
+        return user;
+      } catch (error) {
+        throw new Error(`Error updating membership: ${error.message}`);
+      }
+}
