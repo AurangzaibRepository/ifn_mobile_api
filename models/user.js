@@ -55,7 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: USER_STATUS.ACIVE,
       type: DataTypes.ENUM(...Object.values(USER_STATUS))
     },
-    membership_type: { type: DataTypes.STRING }
+    membership_type: DataTypes.STRING(100),
+    spouse_first_name: DataTypes.STRING(80),
+    spouse_last_name: DataTypes.STRING(80),
+    spouse_email: DataTypes.STRING(100)
   }, {
     sequelize,
     modelName: 'User',
