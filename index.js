@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const errorHandler = require('./middlewares/error-handler.middleware');
 const authenticationMiddleware = require('./middlewares/authentication.middleware');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 const app = express();
 
@@ -16,6 +18,10 @@ app.use('/images', express.static('public/images'));
 // Routes
 // app.use(authenticationMiddleware);
 require('./routes')(app);
+
+// Swagger middleware
+// localhost:8000/api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Error handler
 app.use(errorHandler);
