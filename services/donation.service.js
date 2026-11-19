@@ -12,7 +12,7 @@ exports.findByAttribute = async (attribute, value) => {
 }
 
 exports.getListing = async (pageNumber) => {
-    const {limit, offset} = pageUtil.getLimitOffset(pageNumber);
+    const {pageSize: limit, offset} = pageUtil.getLimitOffset(pageNumber);
 
     const data = await db.Donation.findAll({
         limit,

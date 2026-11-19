@@ -15,7 +15,7 @@ exports.findByAttribute = async (attribute, value) => {
 }
 
 exports.getListing = async (pageNumber, keyword) => {
-    const {limit, offset} = pageUtil.getLimitOffset(pageNumber);
+    const {pageSize: limit, offset} = pageUtil.getLimitOffset(pageNumber);
     let where = {};
 
     // Condition with full text search
@@ -43,6 +43,10 @@ exports.getDetails = async (id) => {
             model: db.EventRegistration
         }
     });
+
+    if (! data) {
+        return null;
+    }
 
     data = data.toJSON();
 
