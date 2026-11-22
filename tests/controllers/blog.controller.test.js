@@ -1,4 +1,3 @@
-const { validationResult } = require('express-validator');
 const blogController = require('../../controllers/blog.controller');
 const blogService = require('../../services/blog.service');
 const { detailValidator } = require('../../validators/blog.validators');
