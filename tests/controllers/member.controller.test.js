@@ -7,7 +7,8 @@ beforeEach(() => {
 
 jest.mock('../../services/member.service', () => ({
     getListing: jest.fn(),
-    getDetails: jest.fn()
+    getDetails: jest.fn(),
+    makeMember: jest.fn()
 }));
 
 describe('listing', () => {
@@ -75,6 +76,32 @@ describe('details', () => {
         expect(res.json).toHaveBeenCalledWith({
             status: true,
             data: member
+        });
+    });
+});
+
+describe('becomeMember', () => {
+    it('Member became successfully', async () => {
+        const req = {
+            params: {
+                id: 1
+            },
+            body: {
+                spouse_name: 'Demo'
+            }
+        };
+
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        await memberController.becomeMember(req, res);
+        expect(memberService.makeMember).toHaveBeenCalledWith(req.params.id, req.body);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            status: true,
+            message: 'Member became successfully'
         });
     });
 });
