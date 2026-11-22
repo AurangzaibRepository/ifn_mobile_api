@@ -8,7 +8,9 @@ beforeEach(() => {
 jest.mock('../../services/member.service', () => ({
     getListing: jest.fn(),
     getDetails: jest.fn(),
-    makeMember: jest.fn()
+    makeMember: jest.fn(),
+    createUser: jest.fn(),
+    updateUser: jest.fn()
 }));
 
 describe('listing', () => {
@@ -102,6 +104,69 @@ describe('becomeMember', () => {
         expect(res.json).toHaveBeenCalledWith({
             status: true,
             message: 'Member became successfully'
+        });
+    });
+});
+
+describe('save', () => {
+    it('Should create user successfully', async () => {
+        const req = {
+            body: {
+                first_name: 'Demo',
+                last_name: 'user',
+                email: 'demouser@gmail.com'
+            },
+            fileName: 'user.jpeg'
+        };
+
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        memberService.createUser.mockResolvedValue({
+            id: 1,
+            ...req.body
+        });
+        await memberController.save(req, res);
+        
+        expect(memberService.createUser).toHaveBeenCalledWith(req.body, 'user.jpeg');
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            status: true,
+            message: 'Member saved successfully',
+            data: {
+                id: 1,
+                ...req.body
+            }
+        });
+    });
+});
+
+describe('update', () => {
+    it('Should user update successfully', async () => {
+        const req = {
+            params: {
+                id: 1
+            },
+            body: {
+                first_name: 'Demo',
+                last_name: 'User',
+                email: 'demouser@gmail.com'
+            }
+        };
+
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        await memberController.update(req, res);
+        expect(memberService.updateUser).toHaveBeenCalledWith(req.params.id, req.body, undefined);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            status: true,
+            message: 'Member updated successfully'
         });
     });
 });
