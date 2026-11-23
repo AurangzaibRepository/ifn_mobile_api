@@ -60,13 +60,13 @@ describe('register', () => {
             json: jest.fn()
         };
 
-        await authService.register(req, res);
+        await authController.register(req, res);
 
         expect(authService.register).toHaveBeenCalledWith(req.body, req.fileName);
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(req.json).toHaveBeenCalledWith({
+        expect(res.json).toHaveBeenCalledWith({
             status: true,
-            message: 'Registration done successfully' 
+            message: 'Registration done successfully'
         });
     });
 });
