@@ -1,5 +1,6 @@
 const donationController = require('../../controllers/donation.controller');
 const donationService = require('../../services/donation.service');
+const donationContributionService = require('../../services/donation_contribution.service');
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -7,7 +8,10 @@ beforeEach(() => {
 
 jest.mock('../../services/donation.service', () => ({
     getListing: jest.fn(),
-    getDetails: jest.fn(),
+    getDetails: jest.fn()
+}));
+
+jest.mock('../../services/donation_contribution.service', () => ({
     makeDonation: jest.fn()
 }));
 
@@ -96,7 +100,7 @@ describe('donate', () => {
 
         await donationController.donate(req, res);
 
-        expect(donationService.makeDonation).toHaveBeenCalledWith(req.body);
+        expect(donationContributionService.makeDonation).toHaveBeenCalledWith(req.body);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
             status: true,
