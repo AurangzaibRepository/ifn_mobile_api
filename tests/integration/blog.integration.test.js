@@ -11,62 +11,78 @@ describe('Blog integration tests', () => {
     });
 
     it('should retrieve blogs from the database', async () => {
-        const blog = await db.Blog.create({
-            title: 'Test blog',
-            text: 'Test blog description',
-            banner: 'blog.jpeg'
-        });
+        let blog;
 
-        const result = await blogService.getListing(1);
+        try {
+            blog = await db.Blog.create({
+                title: 'Test blog',
+                text: 'Test blog description',
+                banner: 'blog.jpeg'
+            });
 
-        expect(result.length).toBeGreaterThan(0);
-        expect(result.some(item => item.id == blog.id)).toBe(true);
+            const result = await blogService.getListing(1);
 
-        await blog.destroy();
+            expect(result.length).toBeGreaterThan(0);
+            expect(result.some(item => item.id == blog.id)).toBe(true);
+        } finally {
+            if (blog) await blog.destroy();
+        }
     });
 
     it('should retrieve blogs with filter from database', async () => {
-        const blog = await db.Blog.create({
-            title: 'Test blog 1',
-            text: 'Test description',
-            banner: 'blog1.jpg'
-        });
+        let blog;
 
-        const result = await blogService.getListing(1, 'Blog 1');
+        try {
+            blog = await db.Blog.create({
+                title: 'Test blog 1',
+                text: 'Test description',
+                banner: 'blog1.jpg'
+            });
 
-        expect(result.length).toBeGreaterThan(0);
-        expect(result.some(item => item.id == blog.id)).toBe(true);
+            const result = await blogService.getListing(1, 'Blog 1');
 
-        await blog.destroy();
+            expect(result.length).toBeGreaterThan(0);
+            expect(result.some(item => item.id == blog.id)).toBe(true);
+        } finally {
+            if (blog) await blog.destroy();
+        }
     });
 
     it('should retrieve blog details from database', async () => {
-        const blog = await db.Blog.create({
-            title: 'Test blog 1',
-            text: 'Test description',
-            banner: 'blog1.jpg'
-        });
+        let blog;
 
-        const result = await blogService.getDetails(blog.id);
+        try {
+            blog = await db.Blog.create({
+                title: 'Test blog 1',
+                text: 'Test description',
+                banner: 'blog1.jpg'
+            });
 
-        expect(result).not.toBe(null);
-        expect(result.title).toBe('Test blog 1');
+            const result = await blogService.getDetails(blog.id);
 
-        await blog.destroy();
+            expect(result).not.toBe(null);
+            expect(result.title).toBe('Test blog 1');
+        } finally {
+            if (blog) await blog.destroy();
+        }
     });
 
     it('should retrieve blog by attribute', async () => {
-        const blog = await db.Blog.create({
-            title: 'Test blog 1',
-            text: 'Test description',
-            banner: 'blog1.jpeg'
-        });
+        let blog;
 
-        const result = await blogService.findByAttribute('title', 'Test blog 1');
+        try {
+            blog = await db.Blog.create({
+                title: 'Test blog 1',
+                text: 'Test description',
+                banner: 'blog1.jpeg'
+            });
 
-        expect(result).not.toBe(null);
-        expect(result.title).toBe('Test blog 1');
+            const result = await blogService.findByAttribute('title', 'Test blog 1');
 
-        await blog.destroy();
+            expect(result).not.toBe(null);
+            expect(result.title).toBe('Test blog 1');
+        } finally {
+            if (blog) await blog.destroy();
+        }
     });
 });

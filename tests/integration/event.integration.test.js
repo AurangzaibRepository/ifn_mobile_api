@@ -12,110 +12,126 @@ describe('Event integration tests', () => {
     });
 
     it('should retrieve events from database', async () => {
-        const user = await db.User.create({
-            firstName: 'Demo',
-            lastName: 'User',
-            email: 'demouser@gmail.com'
-        });
+        let user, event;
 
-        const event = await db.Event.create({
-            title: 'Test event',
-            description: 'Test description',
-            start_date: '2020-01-01',
-            end_date: '2020-01-10',
-            createdBy: user.id
-        });
+        try {
+            user = await db.User.create({
+                firstName: 'Demo',
+                lastName: 'User',
+                email: 'demouser@gmail.com'
+            });
 
-        const result = await eventService.getListing(1);
+            event = await db.Event.create({
+                title: 'Test event',
+                description: 'Test description',
+                start_date: '2020-01-01',
+                end_date: '2020-01-10',
+                createdBy: user.id
+            });
 
-        expect(result.length).toBeGreaterThan(0);
-        expect(result.some(item => item.id === event.id)).toBe(true);
+            const result = await eventService.getListing(1);
 
-        await event.destroy();
-        await user.destroy();
+            expect(result.length).toBeGreaterThan(0);
+            expect(result.some(item => item.id === event.id)).toBe(true);
+        } finally {
+            if (event) await event.destroy();
+            if (user) await user.destroy();
+        }
     });
     
     it('should retrieve events with filter from database', async () => {
-        const user = await db.User.create({
-            firstName: 'Demo',
-            lastName: 'User'
-        });
+        let user, event;
 
-        const event = await db.Event.create({
-            title: 'Test event1',
-            description: 'Test description',
-            start_date: '2020-01-01',
-            end_date: '2020-01-10',
-            createdBy: user.id
-        });
+        try {
+            user = await db.User.create({
+                firstName: 'Demo',
+                lastName: 'User'
+            });
 
-        const result = await eventService.getListing(1, 'event1');
+            event = await db.Event.create({
+                title: 'Test event1',
+                description: 'Test description',
+                start_date: '2020-01-01',
+                end_date: '2020-01-10',
+                createdBy: user.id
+            });
 
-        expect(result.length).toBeGreaterThan(0);
-        expect(result.some(item => item.id === event.id)).toBe(true);
+            const result = await eventService.getListing(1, 'event1');
 
-        await event.destroy();
-        await user.destroy();
+            expect(result.length).toBeGreaterThan(0);
+            expect(result.some(item => item.id === event.id)).toBe(true);
+        } finally {
+            if (event) await event.destroy();
+            if (user) await user.destroy();
+        }
     });
 
     it('should retrieve event details from database', async () => {
-        const user = await db.User.create({
-            firstName: 'Demo',
-            lastName: 'User'
-        });
+        let user, event;
 
-        const event = await db.Event.create({
-            title: 'Test event1',
-            description: 'Test description',
-            start_date: '2020-01-01',
-            end_date: '2020-01-10',
-            createdBy: user.id
-        });
+        try {
+            user = await db.User.create({
+                firstName: 'Demo',
+                lastName: 'User'
+            });
 
-        const result = await eventService.getDetails(event.id);
+            event = await db.Event.create({
+                title: 'Test event1',
+                description: 'Test description',
+                start_date: '2020-01-01',
+                end_date: '2020-01-10',
+                createdBy: user.id
+            });
 
-        expect(result).not.toBe(null);
-        expect(result.title).toBe('Test event1');
+            const result = await eventService.getDetails(event.id);
 
-        await event.destroy();
-        await user.destroy();
+            expect(result).not.toBe(null);
+            expect(result.title).toBe('Test event1');
+        } finally {
+            if (event) await event.destroy();
+            if (user) await user.destroy();
+        }
     });
 
     it('should register an event without user_id provided', async () => {
-        const user = await db.User.create({
-            firstName: 'Demo',
-            lastName: 'User'
-        });
+        let user, event, registeredUser, eventRegistration;
+        
+        try {
+            user = await db.User.create({
+                firstName: 'Demo',
+                lastName: 'User'
+            });
 
-        const event = await db.Event.create({
-            title: 'Test event1',
-            description: 'Test description',
-            start_date: '2020-01-01',
-            end_date: '2020-01-10',
-            createdBy: user.id
-        });
+            event = await db.Event.create({
+                title: 'Test event1',
+                description: 'Test description',
+                start_date: '2020-01-01',
+                end_date: '2020-01-10',
+                createdBy: user.id
+            });
 
-        const data = {
-            event_id: event.id,
-            first_name: 'test',
-            last_name: 'user',
-            email: 'testuser@gmail.com',
-            contact_number: '0092312312'
-        };
+            const data = {
+                event_id: event.id,
+                first_name: 'test',
+                last_name: 'user',
+                email: 'testuser@gmail.com',
+                contact_number: '0092312312'
+            };
 
-        await eventService.register(data);
+            await eventService.register(data);
 
-        const registeredUser = await userService.findByAttribute('email', data.email);
-        const eventRegistration = await db.EventRegistration.findOne({
-            where: { user_id: registeredUser.id, event_id: event.id }
-        });
-        expect(registeredUser).not.toBeNull();
-        expect(registeredUser.email).toBe(data.email);
-        expect(eventRegistration).not.toBeNull();
-
-        await eventRegistration.destroy();
-        await event.destroy();
-        await user.destroy();
-        await registeredUser.destroy();
+            registeredUser = await userService.findByAttribute('email', data.email);
+            eventRegistration = await db.EventRegistration.findOne({
+                where: { user_id: registeredUser.id, event_id: event.id }
+            });
+            expect(registeredUser).not.toBeNull();
+            expect(registeredUser.email).toBe(data.email);
+            expect(eventRegistration).not.toBeNull();
+        } finally {
+            if (eventRegistration) await eventRegistration.destroy();
+            if (event) await event.destroy();
+            if (user) await user.destroy();
+            if (registeredUser) await registeredUser.destroy();
+        }
     });
 });
